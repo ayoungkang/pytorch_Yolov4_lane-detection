@@ -25,7 +25,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch import optim
 from torch.nn import functional as F
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from easydict import EasyDict as edict
 
 from dataset import Yolo_dataset
@@ -606,6 +607,7 @@ def _get_date_str():
 if __name__ == "__main__":
     logging = init_logger(log_dir='log')
     cfg = get_args(**Cfg)
+    print(cfg)
     os.environ["CUDA_VISIBLE_DEVICES"] = cfg.gpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logging.info(f'Using device {device}')
