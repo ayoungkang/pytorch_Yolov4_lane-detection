@@ -252,15 +252,22 @@ class Yolo_dataset(Dataset):
         self.cfg = cfg
         self.train = train
 
+        self.image_id_num = 0 
+
         truth = {}
+        img_id = {}
+        #print("label", lable_path)
         f = open(lable_path, 'r', encoding='utf-8')
         for line in f.readlines():
             data = line.split(" ")
+            #print(data)
             truth[data[0]] = []
-            for i in data[1:]:
+            img_id[data[0]] = data[1]
+            for i in data[2:]:
                 truth[data[0]].append([int(float(j)) for j in i.split(',')])
 
         self.truth = truth
+        self.img_id = img_id
         self.imgs = list(self.truth.keys())
 
     def __len__(self):
@@ -389,6 +396,7 @@ class Yolo_dataset(Dataset):
     def _get_val_item(self, index):
         """
         """
+        self.image_id_num += 1
         img_path = self.imgs[index]
         bboxes_with_cls_id = np.array(self.truth.get(img_path), dtype=np.float)
         img = cv2.imread(os.path.join(self.cfg.dataset_dir, img_path))
@@ -403,13 +411,13 @@ class Yolo_dataset(Dataset):
         boxes[..., 2:] = boxes[..., 2:] - boxes[..., :2]  # box width, box height
         target['boxes'] = torch.as_tensor(boxes, dtype=torch.float32)
         target['labels'] = torch.as_tensor(bboxes_with_cls_id[...,-1].flatten(), dtype=torch.int64)
-        target['image_id'] = torch.tensor([get_image_id(img_path)])
+        target['image_id'] = torch.tensor([get_image_id(img_path, self.img_id)])
         target['area'] = (target['boxes'][:,3])*(target['boxes'][:,2])
         target['iscrowd'] = torch.zeros((num_objs,), dtype=torch.int64)
         return img, target
 
 
-def get_image_id(filename:str) -> int:
+def get_image_id(filename:str, img_id) -> int:
     """
     Convert a string to a integer.
     Make sure that the images and the `image_id`s are in one-one correspondence.
@@ -422,12 +430,17 @@ def get_image_id(filename:str) -> int:
     >>> lv = lv.replace("level", "")
     >>> no = f"{int(no):04d}"
     >>> return int(lv+no)
-    """
-    raise NotImplementedError("Create your own 'get_image_id' function")
+
+    filename = os.path.splitext(os.path.basename(filename))[0]
+    print(filename)
+    #raise NotImplementedError("Create your own 'get_image_id' function")
     lv, no = os.path.splitext(os.path.basename(filename))[0].split("_")
     lv = lv.replace("level", "")
     no = f"{int(no):04d}"
-    return int(lv+no)
+    """
+    iid = int(img_id[filename])
+    #print(iid)
+    return iid
 
 
 if __name__ == "__main__":

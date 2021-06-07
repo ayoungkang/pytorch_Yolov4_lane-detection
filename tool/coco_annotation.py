@@ -17,23 +17,32 @@ import os
 
 """hyper parameters"""
 #json_file_path = 'E:/Dataset/mscoco2017/annotations/instances_train2017.json'
-json_file_path = '/nfs/stak/users/kanga2/kuipo/kuipo/pytorch-YOLOv4/data/mscoco2017/annotations/instances_val2017.json'
-images_dir_path = 'mscoco2017/val2017/'
+#json_file_path = '/nfs/stak/users/kanga2/kuipo/kuipo/pytorch-YOLOv4/data/mscoco2017/annotations/instances_val2017.json'
+json_file_path = '../data/bdd100k/labels/det_20_coco/cut_det_val_coco_v2.json'
+#images_dir_path = 'mscoco2017/val2017/'
+images_dir_path = 'bdd100k/images/100k/val/'
+#output_path = '../data/val.txt'
+#output_path = '../train.txt'
 output_path = '../data/val.txt'
 
 """load json file"""
 name_box_id = defaultdict(list)
+img_id = dict()
 id_name = dict()
 with open(json_file_path, encoding='utf-8') as f:
     data = json.load(f)
 
 """generate labels"""
 images = data['images']
+#print(type(images[0]))
 annotations = data['annotations']
 for ant in tqdm(annotations):
+    #print(ant.keys())
     id = ant['image_id']
-    # name = os.path.join(images_dir_path, images[id]['file_name'])
-    name = os.path.join(images_dir_path, '{:012d}.jpg'.format(id))
+    file_name = ant['file_name']
+    #name = os.path.join(images_dir_path, images[id]['file_name'])
+    #name = os.path.join(images_dir_path, '{:012d}.jpg'.format(id))
+    name = os.path.join(images_dir_path, file_name)
     cat = ant['category_id']
 
     if cat >= 1 and cat <= 11:
@@ -56,11 +65,13 @@ for ant in tqdm(annotations):
         cat = cat - 11
 
     name_box_id[name].append([ant['bbox'], cat])
+    img_id[name] = id
 
 """write to txt"""
 with open(output_path, 'w') as f:
     for key in tqdm(name_box_id.keys()):
-        f.write(key)
+        f.write(key+" ")
+        f.write(str(img_id[key]))
         box_infos = name_box_id[key]
         for info in box_infos:
             x_min = int(info[0][0])
@@ -71,4 +82,5 @@ with open(output_path, 'w') as f:
             box_info = " %d,%d,%d,%d,%d" % (
                 x_min, y_min, x_max, y_max, int(info[1]))
             f.write(box_info)
+        
         f.write('\n')
