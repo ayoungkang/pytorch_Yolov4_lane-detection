@@ -19,12 +19,12 @@ _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 Cfg = EasyDict()
 
 Cfg.use_darknet_cfg = False
-Cfg.cfgfile = os.path.join(_BASE_DIR, 'cfg', 'yolov4.cfg')
+Cfg.cfgfile = os.path.join(_BASE_DIR, 'cfg', 'yolov4-custom.cfg')
 #Cfg.cfgfile = 'Cfg file'
-Cfg.batch = 32
-Cfg.subdivisions = 16
-Cfg.width = 608
-Cfg.height = 608
+Cfg.batch = 64
+Cfg.subdivisions =16
+Cfg.width = 640
+Cfg.height = 640
 Cfg.channels = 3
 Cfg.momentum = 0.949
 Cfg.decay = 0.0005
@@ -35,8 +35,10 @@ Cfg.hue = .1
 
 Cfg.learning_rate = 0.00261
 Cfg.burn_in = 1000
-Cfg.max_batches = 500500
-Cfg.steps = [400000, 450000]
+#Cfg.max_batches = 500500
+Cfg.max_batches = 16000 
+#Cfg.steps = [400000, 450000]
+Cfg.steps = [12800,14400]
 Cfg.policy = Cfg.steps
 Cfg.scales = .1, .1
 
@@ -45,7 +47,7 @@ Cfg.mosaic = 1
 
 Cfg.letter_box = 0
 Cfg.jitter = 0.2
-Cfg.classes = 80
+Cfg.classes = 8
 Cfg.track = 0
 Cfg.w = Cfg.width
 Cfg.h = Cfg.height
@@ -53,8 +55,8 @@ Cfg.flip = 1
 Cfg.blur = 0
 Cfg.gaussian = 0
 Cfg.boxes = 60  # box num
-Cfg.TRAIN_EPOCHS = 300
-Cfg.train_label = os.path.join(_BASE_DIR, 'data', 'train.txt')
+Cfg.TRAIN_EPOCHS = 1000
+Cfg.train_label = os.path.join(_BASE_DIR, 'train.txt')
 Cfg.val_label = os.path.join(_BASE_DIR, 'data' ,'val.txt')
 Cfg.TRAIN_OPTIMIZER = 'adam'
 '''

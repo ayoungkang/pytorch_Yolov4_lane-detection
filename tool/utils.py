@@ -99,8 +99,8 @@ def nms_cpu(boxes, confs, nms_thresh=0.5, min_mode=False):
 def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
     import cv2
     img = np.copy(img)
-    colors = np.array([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0]], dtype=np.float32)
-
+    #colors = np.array([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0]], dtype=np.float32)
+    colors = np.array([[0.9, 0.9, 0.2], [0.7, 1, 1], [0.3, 0.9, 0.9], [0.9, 0.4, 0.5 ],  [1, 0.5, 0.6], [0.6, 0.7, 1]], dtype=np.float32)
     def get_color(c, x, max_val):
         ratio = float(x) / max_val * 5
         i = int(math.floor(ratio))
@@ -133,8 +133,14 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
             blue = get_color(0, offset, classes)
             if color is None:
                 rgb = (red, green, blue)
-            img = cv2.putText(img, class_names[cls_id], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
-        img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 1)
+            (text_width, text_height) = cv2.getTextSize(class_names[cls_id], cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.7, thickness=2)[0]
+            text_offset_x = x1
+            text_offset_y = y1 - 2
+            box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y - text_height - 2))
+            cv2.rectangle(img, box_coords[0], box_coords[1], rgb, cv2.FILLED)
+
+            img = cv2.putText(img, class_names[cls_id], (x1, y1-3), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.7, color=(0,0,0), thickness=2)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 2)
     if savename:
         print("save plot results to %s" % savename)
         cv2.imwrite(savename, img)
@@ -153,6 +159,7 @@ def read_truths(lab_path):
 
 
 def load_class_names(namesfile):
+    print(namesfile)
     class_names = []
     with open(namesfile, 'r') as fp:
         lines = fp.readlines()
