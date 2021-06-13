@@ -18,12 +18,12 @@ import os
 """hyper parameters"""
 #json_file_path = 'E:/Dataset/mscoco2017/annotations/instances_train2017.json'
 #json_file_path = '/nfs/stak/users/kanga2/kuipo/kuipo/pytorch-YOLOv4/data/mscoco2017/annotations/instances_val2017.json'
-json_file_path = '../data/bdd100k/labels/det_20_coco/cut_det_val_coco_v2.json'
+json_file_path = '../data/bdd100k/labels/det_20_coco/cut_ten_det_train_coco_v2.json'
 #images_dir_path = 'mscoco2017/val2017/'
-images_dir_path = 'bdd100k/images/100k/val/'
+images_dir_path = 'bdd100k/images/100k/train/'
 #output_path = '../data/val.txt'
-#output_path = '../train.txt'
-output_path = '../data/val.txt'
+output_path = '../train.txt'
+#output_path = '../data/val.txt'
 
 """load json file"""
 name_box_id = defaultdict(list)
