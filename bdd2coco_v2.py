@@ -10,14 +10,14 @@ cfg = parser.parse_args()
 
 # src_val_dir = os.path.join(cfg.bdd_dir, 'labels', 'bdd100k_labels_images_val.json')
 # src_train_dir = os.path.join(cfg.bdd_dir, 'labels', 'bdd100k_labels_images_train.json')
-src_val_dir = os.path.join(cfg.bdd_dir, 'det_20', 'cut_det_val.json')
-src_train_dir = os.path.join(cfg.bdd_dir, 'det_20', 'cut_det_train.json')
+src_val_dir = os.path.join(cfg.bdd_dir, 'det_20', 'cut_det_ten_val.json')
+src_train_dir = os.path.join(cfg.bdd_dir, 'det_20', 'cut_det_ten_train.json')
 
 
 os.makedirs(os.path.join(cfg.bdd_dir, 'det_20_coco'), exist_ok=True)
 
-dst_val_dir = os.path.join(cfg.bdd_dir, 'det_20_coco', 'cut_det_val_coco_v2.json')
-dst_train_dir = os.path.join(cfg.bdd_dir, 'det_20_coco', 'cut_det_train_coco_v2.json')
+dst_val_dir = os.path.join(cfg.bdd_dir, 'det_20_coco', 'cut_det_ten_val_coco_v2.json')
+dst_train_dir = os.path.join(cfg.bdd_dir, 'det_20_coco', 'cut_det_ten_train_coco_v2.json')
 
 
 def bdd2coco_detection(labeled_images, save_dir):
